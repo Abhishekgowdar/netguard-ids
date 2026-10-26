@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetGuard IDS - Network Intrusion Detection System</title>
+    <link rel="stylesheet" href="assets/css/styles.css?v=3.0">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <div class="shield-icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32">
+                        <path d="M16 2 L4 8 L4 16 C4 22 8 28 16 30 C24 28 28 22 28 16 L28 8 Z"
+                              fill="none" stroke="currentColor" stroke-width="2"/>
+                        <path d="M16 10 L16 20 M12 16 L20 16"
+                              stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <span class="brand-name">NetGuard IDS</span>
+            </div>
+            <div class="navbar-status">
+                <div class="status-indicator" id="statusIndicator"></div>
+                <span id="statusText">Connecting...</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Statistics Section -->
+        <section class="stats-section">
+            <div class="stat-card" id="totalAlertsCard">
+                <div class="stat-icon shield-gradient">
+                    <svg width="32" height="32" viewBox="0 0 32 32">
+                        <path d="M16 2 L4 8 L4 16 C4 22 8 28 16 30 C24 28 28 22 28 16 L28 8 Z"
+                              fill="none" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <p class="stat-label">Total Alerts</p>
+                    <h2 class="stat-value" id="totalAlerts">0</h2>
+                </div>
+            </div>
+
+            <div class="stat-card" id="todayAlertsCard">
+                <div class="stat-icon success-gradient">
+                    <svg width="32" height="32" viewBox="0 0 32 32">
+                        <path d="M6 16 L12 22 L26 8" fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <p class="stat-label">Alerts Today</p>
+                    <h2 class="stat-value" id="todayAlerts">0</h2>
+                </div>
+            </div>
+
+            <div class="stat-card" id="hourAlertsCard">
+                <div class="stat-icon warning-gradient">
+                    <svg width="32" height="32" viewBox="0 0 32 32">
+                        <circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <path d="M16 8 L16 16 L22 16" stroke="currentColor" stroke-width="2"
+                              stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <p class="stat-label">Last Hour</p>
+                    <h2 class="stat-value" id="hourAlerts">0</h2>
+                </div>
+            </div>
+
+            <div class="stat-card" id="criticalAlertsCard">
+                <div class="stat-icon danger-gradient">
+                    <svg width="32" height="32" viewBox="0 0 32 32">
+                        <path d="M16 4 L28 26 L4 26 Z" fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M16 12 L16 18 M16 22 L16 23" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <p class="stat-label">Critical Threats</p>
+                    <h2 class="stat-value" id="criticalAlerts">0</h2>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alerts Section -->
+        <section class="alerts-section">
+            <div class="alerts-header">
+                <div class="section-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" class="section-icon">
+                        <path d="M12 2 L2 7 L2 12 C2 16.5 5 21 12 22.5 C19 21 22 16.5 22 12 L22 7 Z"
+                              fill="none" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    <h2>Recent Threats</h2>
+                </div>
+                <button class="refresh-btn" id="refreshBtn" onclick="loadData()">
+                    <svg width="20" height="20" viewBox="0 0 24 24">
+                        <path d="M21 10 L21 4 M21 4 L15 4 M21 4 L13 12" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        <path d="M3 14 L3 20 M3 20 L9 20 M3 20 L11 12" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    </svg>
+                    Refresh
+                </button>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading-state" id="loadingState">
+                <div class="loader"></div>
+                <p>Loading threats...</p>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <svg width="80" height="80" viewBox="0 0 80 80" class="empty-icon">
+                    <circle cx="40" cy="40" r="35" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <path d="M25 40 L35 50 L55 30" stroke="currentColor" stroke-width="3"
+                          stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+                <h3>No Threats Detected</h3>
+                <p>Your network is secure</p>
+            </div>
+
+            <!-- Error State -->
+            <div class="error-state" id="errorState" style="display: none;">
+                <svg width="80" height="80" viewBox="0 0 80 80" class="error-icon">
+                    <circle cx="40" cy="40" r="35" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <path d="M28 28 L52 52 M52 28 L28 52" stroke="currentColor" stroke-width="3"
+                          stroke-linecap="round"/>
+                </svg>
+                <h3>Connection Failed</h3>
+                <p>Unable to connect to backend server</p>
+                <p class="error-help">Please start the backend:</p>
+                <code>python backend/main.py</code>
+            </div>
+
+            <!-- Alerts List -->
+            <div class="alerts-list" id="alertsList"></div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 NetGuard IDS - Built with ❤️ for Network Security</p>
+        <p class="footer-note">Last updated: <span id="lastUpdated">Never</span></p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
