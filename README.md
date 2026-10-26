@@ -444,7 +444,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Abhishek Gowdar**
 
 - GitHub: [@Abhishekgowdar](https://github.com/Abhishekgowdar)
-- LinkedIn: [Your LinkedIn Profile]
+- LinkedIn: [Abhishek Gowdar](https://www.linkedin.com/in/aabhigowda/)
 
 ---
 
