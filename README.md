@@ -33,7 +33,7 @@
 
 <div align="center">
 
-![NetGuard IDS Architecture](netguard-architecture.png)
+![NetGuard IDS Architecture](netguard-architecture.jpg)
 
 </div>
 
