@@ -29,6 +29,25 @@
 
 ---
 
+## 🏗️ System Architecture
+
+<div align="center">
+
+![NetGuard IDS Architecture](netguard-architecture.png)
+
+</div>
+
+**Complete end-to-end architecture showing:**
+- 🌐 **Layer 1:** Network traffic capture with Scapy (TCP/UDP/ICMP/DNS)
+- 🔍 **Layer 2:** Dual detection engine (Signature-based + ML anomaly detection)
+- ⚡ **Layer 3:** FastAPI REST API with 8 endpoints
+- 💾 **Layer 4:** SQLite database with SQLAlchemy ORM
+- 🖥️ **Layer 5:** Live SOC dashboard with real-time updates
+
+*Professional architecture diagram showcasing the complete threat detection pipeline from packet capture to dashboard visualization*
+
+---
+
 ## ✨ Features
 
 ### 🔍 **Real-Time Network Monitoring**
